@@ -30,6 +30,21 @@ check_template() {
   ok "template has frontmatter contract + all sections"
 }
 
+check_phases() {
+  echo "== phases playbook =="
+  local f=skills/phase-engine/phases.md
+  [ -f "$f" ] || { bad "phases.md missing"; return; }
+  for p in Frame Why Users Success Compete Vision Features Stack Architecture Synthesize; do
+    grep -qi "^### .*$p" "$f" || bad "phase section missing: $p"
+  done
+  for s in "Goal" "Probes" "Orchestrates" "Writes" "Done-when"; do
+    grep -q "$s" "$f" || bad "phase template field missing: $s"
+  done
+  grep -qi "degrade" "$f" || bad "no degradation fallback documented"
+  ok "phases.md has all 10 phases with full template"
+}
+
 check_manifest
 check_template
+check_phases
 exit $fail
