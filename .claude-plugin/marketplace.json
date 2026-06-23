@@ -1,0 +1,21 @@
+{
+  "name": "specy",
+  "owner": {
+    "name": "yonk-labs",
+    "email": "matt@theyonk.com"
+  },
+  "description": "specy — guided spec conductor.",
+  "plugins": [
+    {
+      "name": "specy",
+      "source": "./",
+      "description": "Guided, assertive, AI-assisted interview that turns an idea or codebase into one agent-ready SPEC.md.",
+      "version": "0.1.0",
+      "author": {
+        "name": "yonk-labs",
+        "email": "matt@theyonk.com"
+      },
+      "keywords": ["spec", "prd", "strategy", "brainstorming", "requirements"]
+    }
+  ]
+}
