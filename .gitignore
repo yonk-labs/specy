@@ -1,0 +1,5 @@
+# Private local session state (remember plugin)
+.remember/
+
+# Skill output (per yonk global convention)
+skill-output/
