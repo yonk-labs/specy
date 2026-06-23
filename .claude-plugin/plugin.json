@@ -1,0 +1,16 @@
+{
+  "name": "specy",
+  "description": "Guided, assertive, AI-assisted interview that turns an idea or codebase into one agent-ready SPEC.md.",
+  "version": "0.1.0",
+  "author": {
+    "name": "yonk",
+    "email": "matt@theyonk.com"
+  },
+  "keywords": [
+    "spec",
+    "prd",
+    "strategy",
+    "brainstorming",
+    "requirements"
+  ]
+}
