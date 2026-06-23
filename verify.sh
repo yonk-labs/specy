@@ -44,7 +44,19 @@ check_phases() {
   ok "phases.md has all 10 phases with full template"
 }
 
+check_criticality() {
+  echo "== criticality =="
+  local f=skills/phase-engine/criticality.md
+  [ -f "$f" ] || { bad "criticality.md missing"; return; }
+  grep -qi "Success Criterion" "$f" || bad "criticality test not anchored to Success Criteria"
+  grep -qi "idea mode" "$f" || bad "idea-mode extraction missing"
+  grep -qi "code mode" "$f" || bad "code-mode extraction missing"
+  grep -qi "Acceptance check" "$f" || bad "requirements table columns missing"
+  ok "criticality.md complete"
+}
+
 check_manifest
 check_template
 check_phases
+check_criticality
 exit $fail
