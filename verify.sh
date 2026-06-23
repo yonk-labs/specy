@@ -14,5 +14,22 @@ check_manifest() {
   ok "manifest valid, name=specy"
 }
 
+check_template() {
+  echo "== template =="
+  local f=templates/SPEC.template.md
+  [ -f "$f" ] || { bad "template missing"; return; }
+  for k in slug input intensity updated phases; do
+    grep -q "^$k:" "$f" || bad "frontmatter missing key: $k"
+  done
+  for p in frame why users success compete vision features stack architecture synthesize; do
+    grep -q "  $p:" "$f" || bad "phases block missing: $p"
+  done
+  for h in "Overview" "Why" "Users" "Success Criteria" "Competitive" "Vision" "Features" "Tech Stack" "Architecture"; do
+    grep -q "^## .*$h" "$f" || bad "section header missing: $h"
+  done
+  ok "template has frontmatter contract + all sections"
+}
+
 check_manifest
+check_template
 exit $fail
