@@ -55,8 +55,25 @@ check_criticality() {
   ok "criticality.md complete"
 }
 
+check_skill() {
+  echo "== SKILL =="
+  local f=skills/phase-engine/SKILL.md
+  [ -f "$f" ] || { bad "SKILL.md missing"; return; }
+  head -12 "$f" | grep -q "^name:" || bad "SKILL.md missing frontmatter name"
+  head -12 "$f" | grep -q "^description:" || bad "SKILL.md missing frontmatter description"
+  for v in status resume jump redo; do
+    grep -q "$v" "$f" || bad "dispatch verb missing: $v"
+  done
+  grep -q "phases.md" "$f" || bad "does not reference phases.md"
+  grep -q "criticality.md" "$f" || bad "does not reference criticality.md"
+  grep -qi "brutal" "$f" || bad "intensity dial not documented"
+  grep -qi "stele" "$f" || bad "oversized-output rule missing"
+  ok "SKILL.md complete"
+}
+
 check_manifest
 check_template
 check_phases
 check_criticality
+check_skill
 exit $fail
