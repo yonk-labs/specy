@@ -71,9 +71,19 @@ check_skill() {
   ok "SKILL.md complete"
 }
 
+check_command() {
+  echo "== command =="
+  local f=commands/spec.md
+  [ -f "$f" ] || { bad "spec.md missing"; return; }
+  grep -q "ARGUMENTS" "$f" || bad "command does not pass \$ARGUMENTS"
+  grep -qi "phase-engine" "$f" || bad "command does not invoke phase-engine"
+  ok "command wired to engine"
+}
+
 check_manifest
 check_template
 check_phases
 check_criticality
 check_skill
+check_command
 exit $fail
