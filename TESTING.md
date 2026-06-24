@@ -16,7 +16,7 @@ Two layers:
 
 **Expected:**
 - `spec/<slug>/SPEC.md` is created from the template.
-- All 10 frontmatter phases reach `confirmed`.
+- All 12 frontmatter phases reach `confirmed`.
 - Every `##` section is filled (no remaining `_italic placeholder_` lines).
 - `spec/<slug>/evidence/` contains per-phase files.
 - The Features table has ≥1 Critical feature, each tracing to an SC/Job with an acceptance check.
@@ -34,11 +34,30 @@ Two layers:
 
 **Expected:** phase 1 (Frame) runs a `reverse-engineer` pass (or its inline fallback) and `## Overview / Current State` is populated with what the code does today; the Features table shows a `Status` column (exists/partial/missing).
 
-## Fixture 4 — Degradation (missing sub-skill)
+## Fixture 4 — Degradation (missing *optional* skill)
 
-1. With `market-intel` not installed, run a spec to phase 5 (Compete).
+specy's seven method skills ship bundled, so they're never missing. Only the
+optional external tools degrade. Test with one absent:
 
-**Expected:** the phase degrades to inline `WebSearch`, still names comparables, and `evidence/` notes the degradation. No hard failure.
+1. With `abe` not installed, run a spec to phase 5 (Compete) in `--brutal`.
+2. With `superpowers:writing-plans` not installed, run a spec through phase 12 (Synthesize).
+
+**Expected:** phase 5 still earns the differentiation via the bundled
+`specy:market-intel` / `specy:research-and-design` and just skips the `abe`
+debate; phase 12 writes an inline task list instead of handing off. `evidence/`
+notes each skipped consult. No hard failure.
+
+## Fixture 5 — Design phase (co-design + propose mode)
+
+1. Run a spec where one critical feature is a design problem (e.g. "simplify the in-game economy").
+2. Reach phase 8 (Design). For that feature, answer the "vision or propose?" probe with **"not sure, you decide."**
+
+**Expected:** specy does NOT keep drilling "why". It switches to propose mode —
+offers 2-3 distinct concrete options with trade-offs, names a recommendation tied
+to an SC/principle, and lets you react or delegate. The chosen mechanism lands in
+`## Design — How It Works`, flagged as a specy proposal so it can be revisited.
+Repeat with a feature where you *do* have a vision: specy draws it out and
+pressure-tests it instead of proposing.
 
 ## Regression
 

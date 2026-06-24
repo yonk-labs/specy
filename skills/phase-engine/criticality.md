@@ -46,10 +46,15 @@ invent features that serve nothing.
 
 Write to `## Features & Requirements`:
 
-| ID | Feature | Critical? | Serves (SC/Job) | Acceptance check | Status |
-|----|---------|-----------|-----------------|------------------|--------|
-| F1 | …       | ✅ / ⬜    | SC-2, Job-A      | observable pass condition | exists/partial/missing |
+| ID | Feature | How (sketch) | Critical? | Serves (SC/Job) | Acceptance check | Status |
+|----|---------|--------------|-----------|-----------------|------------------|--------|
+| F1 | …       | one-line mechanism | ✅ / ⬜ | SC-2, Job-A | observable pass condition | exists/partial/missing |
 
+- **How (sketch)** is a *one-line* mechanism — how the feature actually works,
+  not how it's tested. Keep it to a phrase; if a feature needs real design
+  thought (the user has a vision, or doesn't and wants options), don't resolve it
+  here — flag it `→ Design` and work it in **phase 8 (Design)**. Mark `—` only
+  when the acceptance check already makes the mechanism obvious.
 - **Acceptance check** is what makes each feature buildable — it becomes a
   `writing-plans` milestone and a coding agent's verification target. Never leave
   it vague; phrase it as an observable pass/fail.

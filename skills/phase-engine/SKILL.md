@@ -1,6 +1,6 @@
 ---
 name: phase-engine
-description: Drive a /spec interview — dispatch commands, walk the 10 phases, manage spec state in SPEC.md frontmatter, and synthesize one agent-ready SPEC.md. Use when running or resuming /spec.
+description: Drive a /spec interview — dispatch commands, walk the 12 phases, manage spec state in SPEC.md frontmatter, and synthesize one agent-ready SPEC.md. Use when running or resuming /spec.
 ---
 
 # phase-engine
@@ -10,7 +10,7 @@ This skill drives a guided, assertive interview that turns an idea or a codebase
 into one agent-ready `SPEC.md`.
 
 Read alongside:
-- `phases.md` — the 10-phase playbook (what to ask, what to orchestrate, what to write).
+- `phases.md` — the 12-phase playbook (what to ask, what to orchestrate, what to write).
 - `criticality.md` — phase-7 feature extraction + the criticality test.
 - `../../templates/SPEC.template.md` — the output contract.
 
@@ -40,7 +40,7 @@ If there is no input and no existing spec → ask for an idea or a path.
 For the current phase:
 1. Read its entry in `phases.md`.
 2. Ask its Probes **one at a time** — never batch questions.
-3. Orchestrate its sub-skill via the Skill tool, with the degradation fallback if the skill is absent. Phase 7 follows `criticality.md`.
+3. Orchestrate its method skill via the Skill tool, **amplify-first**: prefer a fuller installed version (the public ai-skills library, <https://github.com/yonk-labs/yonk-ai-skills>), else fall back to the bundled `specy:<skill>` (always present) — see "How to resolve a method skill" in `phases.md`. Separate-project tools (`abe`, `second-opinion`, `superpowers:writing-plans`) are optional and take the degradation fallback if absent. Phase 7 follows `criticality.md`.
 4. Write its section, flip its status, summarize what was captured, and advance — or stop if the user quits (state is already saved).
 
 Stop and ask rather than guess whenever an answer is genuinely ambiguous.
@@ -49,18 +49,18 @@ Stop and ask rather than guess whenever an answer is genuinely ambiguous.
 
 - **gentle** — supportive, probing tone; still asks "why", but no adversarial pressure.
 - **standard** (default) — refuse vague answers, dig to bedrock, flag weak differentiation.
-- **brutal** — everything in standard, plus actively attack the reasoning: invoke `abe` debate/validate and AAT-style critique on motivation (phase 2), differentiation (phase 5), and the stack pick (phase 8). Log each consult to `evidence/`.
+- **brutal** — everything in standard, plus actively attack the reasoning with AAT-style critique on motivation (phase 2), differentiation (phase 5), the design/mechanism (phase 8), and the stack pick (phase 9); if `abe` is installed, route those through `abe` debate/validate too. Log each consult to `evidence/`.
 
 ## 5. Cross-cutting AI-assist (every phase)
 
 - **URL pasted** → `WebFetch` it, summarize into `evidence/`, cite it in the spec.
-- **"I'm not sure"** → research it (`WebSearch`, or `deep-research` / `research-base` if available) and bring findings back for the user to react to — don't stall.
-- **Other LLMs** → `abe` (debate/validate) and `second-opinion` for non-host perspectives; heaviest in `brutal`.
-- **Oversized tool output** → route through `stele` stash and keep the `stele://` ref (per global default). Recall earlier context with `stele` rather than re-deriving it.
+- **"I'm not sure"** → research it with built-in `WebSearch`/`WebFetch` and bring findings back for the user to react to — don't stall. (If a richer research skill like `deep-research` is installed, use it; not required.)
+- **Other LLMs (optional)** → if `abe` (debate/validate) or `second-opinion` are installed, use them for non-host perspectives, heaviest in `brutal`. These are separate installs — specy never requires them.
 
 ## 6. Error handling
 
 - No input + no existing spec → ask for an idea or path.
 - Path isn't code → treat its contents as notes (idea mode with seed material).
 - Multiple in-progress specs on `resume` → list them, default to most-recent.
-- A sub-skill is missing → degrade per its phase's fallback and note the degradation in `evidence/`. specy never hard-fails because another skill isn't installed.
+- A *method* skill's fuller version isn't installed → use the bundled `specy:<skill>` (always present); no degradation, just the slimmer method.
+- An *optional* separate-project tool (`abe`, `second-opinion`, `superpowers:writing-plans`) is missing → degrade per its phase's fallback and note it in `evidence/`. The core interview never hard-fails because another skill isn't installed.

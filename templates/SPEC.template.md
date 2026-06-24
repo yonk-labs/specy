@@ -11,8 +11,10 @@ phases:
   compete: pending
   vision: pending
   features: pending
+  design: pending
   stack: pending
   architecture: pending
+  personas: pending
   synthesize: pending
 ---
 
@@ -53,14 +55,21 @@ _The specific vision and the non-negotiables (principles that won't bend)._
 <!-- phase: features -->
 _Critical = at least one Success Criterion or Job fails without it._
 
-| ID | Feature | Critical? | Serves (SC/Job) | Acceptance check | Status |
-|----|---------|-----------|-----------------|------------------|--------|
+| ID | Feature | How (sketch) | Critical? | Serves (SC/Job) | Acceptance check | Status |
+|----|---------|--------------|-----------|-----------------|------------------|--------|
 
 ## Scope
 <!-- phase: features -->
 - **In (critical):** _…_
 - **Later (could):** _…_
 - **Won't:** _…_
+
+## Design — How It Works
+<!-- phase: design -->
+_How each critical feature and key outcome actually works. One block per item:
+the mechanism, why it was chosen, alternatives considered, open questions. Where
+the picture was specy's proposal (you said "decide for me"), mark it so it can be
+revisited._
 
 ## Tech Stack
 <!-- phase: stack -->
@@ -72,5 +81,11 @@ _Each stack decision, the alternatives weighed, and why._
 ## Architecture
 <!-- phase: architecture -->
 _Components, data flow, and interfaces at the altitude a coding agent needs._
+
+## Persona Feedback
+<!-- phase: personas -->
+_How the people who'd use, buy, or build against this react to the spec above.
+One block per persona: who they are, what wins them, the objection they raise,
+and their verdict. Each objection is resolved or explicitly deferred in synthesis._
 
 <!-- phase: synthesize — synthesis distills the sections above; no new section. -->

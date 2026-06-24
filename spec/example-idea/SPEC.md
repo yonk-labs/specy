@@ -11,8 +11,10 @@ phases:
   compete: confirmed
   vision: confirmed
   features: confirmed
+  design: confirmed
   stack: confirmed
   architecture: confirmed
+  personas: confirmed
   synthesize: confirmed
 ---
 
@@ -72,20 +74,37 @@ A tool so small you forget it's running until it taps you on the shoulder.
 <!-- phase: features -->
 Critical = at least one Success Criterion or Job fails without it.
 
-| ID | Feature | Critical? | Serves (SC/Job) | Acceptance check | Status |
-|----|---------|-----------|-----------------|------------------|--------|
-| F1 | Interval reminders | ✅ | SC-1 | reminder fires within ±30s of interval | — |
-| F2 | Custom interval | ✅ | SC-1, Job | `sip start --every 45m` schedules at 45m | — |
-| F3 | Snooze / dismiss | ✅ | SC-3 | keystroke snoozes 10m or dismisses | — |
-| F4 | Unattended run | ✅ | SC-4 | runs 8h with no restart | — |
-| F5 | Quiet hours | ⬜ later | — | no reminders 22:00–08:00 | — |
-| F6 | Intake tracking/stats | ⬜ won't | — | (out of scope — not a tracker) | — |
+| ID | Feature | How (sketch) | Critical? | Serves (SC/Job) | Acceptance check | Status |
+|----|---------|--------------|-----------|-----------------|------------------|--------|
+| F1 | Interval reminders | scheduler computes next-fire, sleeps, calls notifier | ✅ | SC-1 | reminder fires within ±30s of interval | — |
+| F2 | Custom interval | `--every <dur>` sets the scheduler period | ✅ | SC-1, Job | `sip start --every 45m` schedules at 45m | — |
+| F3 | Snooze / dismiss | keystroke pushes next-fire +10m, or cancels | ✅ | SC-3 | keystroke snoozes 10m or dismisses | — |
+| F4 | Unattended run | long-lived process; suspend → one catch-up max `→ Design` | ✅ | SC-4 | runs 8h with no restart | — |
+| F5 | Quiet hours | suppress fires inside a time window | ⬜ later | — | no reminders 22:00–08:00 | — |
+| F6 | Intake tracking/stats | — | ⬜ won't | — | (out of scope — not a tracker) | — |
 
 ## Scope
 <!-- phase: features -->
 - **In (critical):** F1 interval reminders, F2 custom interval, F3 snooze/dismiss, F4 unattended run.
 - **Later (could):** F5 quiet hours.
 - **Won't:** F6 intake tracking — this is a nudge, not a logger.
+
+## Design — How It Works
+<!-- phase: design -->
+**Reminder delivery (your vision).** The scheduler holds the next-fire timestamp;
+on each tick it calls the platform notifier (OS notification, terminal-bell
+fallback). A snooze keystroke advances next-fire by 10m. *Why:* the process *is*
+the scheduler — no daemon, matching the single-binary non-negotiable.
+*Alternatives weighed:* cron+notify-send (no snooze/quiet-hours), TUI popup
+(misses you when the terminal isn't focused). *Open questions:* none.
+
+**Suspend/resume behaviour (specy proposed — you said "decide for me").** What
+happens to reminders missed while the laptop slept? specy offered: **(A)** fire a
+single catch-up on wake, then resume schedule — *recommended, serves SC-4 without
+a notification storm*; (B) silently skip missed, resume next interval; (C) fire
+all missed (storm — rejected). You delegated → **A**. ⚑ *specy proposal — revisit
+if users find the catch-up nag annoying.* This is the rule behind F4's tightened
+acceptance check.
 
 ## Tech Stack
 <!-- phase: stack -->
@@ -108,3 +127,23 @@ Three small pieces:
 
 Data flow: `cli` → configures `scheduler` → on tick calls `notifier`; snooze
 keystroke pushes the next fire time forward 10m.
+
+## Persona Feedback
+<!-- phase: personas -->
+Three voices reacted to the spec above (full reactions in
+`evidence/persona-feedback.md`).
+
+- **The target user — terminal-bound remote dev.** Wins: nudges where they already
+  are, zero-config. **Objection:** "What happens when my laptop sleeps for lunch —
+  does it fire 6 reminders at once when it wakes?" **Verdict:** would use, if wake
+  behavior is sane. → *Resolved:* added to F4's acceptance check (no reminder storm
+  after suspend; catch-up is capped at one).
+- **The skeptical builder — senior engineer.** **Objection:** "Three OS notifier
+  adapters is most of the maintenance surface for a toy — keep them thin or this
+  rots." **Verdict:** would build it, with that caveat. → *Resolved:* notifier
+  interface is one method (`Notify(title, body) error`); documented as a hard line.
+- **The first-timer — non-technical, hitting it cold.** **Objection:** "After I
+  run `sip start`, how do I know it's actually running?" **Verdict:** would try it,
+  but felt blind. → *Deferred:* surfaced a real gap — there's no `sip status`
+  command. Logged as a Later-scope feature (F7); not promoted to Critical because
+  the OS notification itself is the running signal.
