@@ -19,6 +19,23 @@ versions otherwise. Heavier separate tools (`abe` for multi-model debate,
 `superpowers:writing-plans` for the final plan hand-off) are used if present
 too. None of it is required — specy works standalone.
 
+## Install
+
+specy is a Claude Code plugin, installed from its marketplace (this repo). In
+Claude Code:
+
+```
+/plugin marketplace add yonk-labs/specy
+/plugin install specy@specy
+```
+
+Then run `/spec` (see Usage). To update later, `/plugin marketplace update specy`;
+to remove, `/plugin uninstall specy@specy`. You can also browse and install
+interactively with the `/plugin` menu.
+
+Requires Claude Code with plugin support. Nothing else is required — the method
+skills are bundled (see amplify-first, above).
+
 ## Usage
 
 ```
